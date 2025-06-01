@@ -1,0 +1,20 @@
+    
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+        #dockerfile: Dockerfile
+    image: satyaprasad2006/docker-sample-project:v1.2 # Image name with a version tag
+    ports:
+      - "3000:3000"
+        #volumes:
+      # Bind mount for live development
+      #- ./bindmoutdata/samplebind.txt:/usr/src/app/samplebind.txt
+      # Named volume to persist data
+      #- app-data:/volumesdata/samplevolume.txt
+
+      #volumes:
+      #app-data:
+

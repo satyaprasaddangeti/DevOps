@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ignite-thick-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ignite-thick-client
+  template:
+    metadata:
+      labels:
+        app: ignite-thick-client
+    spec:
+      containers:
+      - name: ignite
+        image: apacheignite/ignite:latest
+        ports:
+        - containerPort: 11211
+        - containerPort: 8080
+        - containerPort: 9090
+        volumeMounts:
+        - name: ignite-config
+          mountPath: /opt/ignite/config
+      - name: jmx-exporter
+        image: bitnami/jmx-exporter:latest
+        args:
+        - -config=opt/jmx-exporter/config.yaml
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+        - name: jmx-config
+          mountPath: /opt/jmx-exporter
+      volumes:
+      - name: ignite-config
+        configMap:
+          name: ignite-config
+      - name: jmx-config
+        configMap:
+          name: jmx-config

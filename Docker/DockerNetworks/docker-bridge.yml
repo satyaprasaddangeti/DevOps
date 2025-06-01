@@ -1,0 +1,48 @@
+version: "3.9"
+
+networks:
+  my_bridge_network:
+    driver: bridge
+
+services:
+  app1:
+    image: nginx
+    container_name: app1
+    networks:
+      - my_bridge_network
+    ports:
+      - "8081:80"
+
+  app2:
+    image: httpd
+    container_name: app2
+    networks:
+      - my_bridge_network
+    ports:
+      - "8082:80"
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    networks:
+      - my_bridge_network
+    ports:
+      - "3306:3306"
+
+  app3:
+    image: nginx
+    container_name: app3
+    network_mode: "host"
+
+  app4:
+    image: alpine
+    container_name: app4
+    networks:
+      - my_bridge_network
+    command: ["sh", "-c", "ping -c 3 app1 && ping -c 3 app2"]
+

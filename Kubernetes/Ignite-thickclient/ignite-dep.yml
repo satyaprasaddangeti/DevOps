@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ignite-thick-client
+  labels:
+    app: ignite
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ignite
+  template:
+    metadata:
+      labels:
+        app: ignite
+    spec:
+      containers:
+        - name: ignite-client
+          image: apacheignite/ignite:2.14.0
+          ports:
+            - containerPort: 8080 # Port for JMX Exporter
+          env:
+            - name: JAVA_OPTS
+              value: "-javaagent:/jmx-exporter/jmx_prometheus_javaagent.jar=8080:/jmx-exporter/jmx-exporter-config.yml"
+          volumeMounts:
+            - name: jmx-exporter
+              mountPath: /jmx-exporter
+        volumes:
+          - name: jmx-exporter
+            configMap:
+              name: ignite-jmx-config
