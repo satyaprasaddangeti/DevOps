@@ -1,4 +1,4 @@
-<source>
+hi<source>
   @type tail
   path /fluentd/log/k8s/*.log
   pos_file /fluentd/log/k8s.pos
@@ -18,3 +18,7 @@
 </match>
 
 satyaprasad2006/fluentdbuild:latest
+long now = System.currentTimeMillis();
+long shifted = now - (30 * 60 * 1000);  // 30 minutes ago
+String shiftedTime = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date(shifted));
+vars.put("formattedTime", shiftedTime);
