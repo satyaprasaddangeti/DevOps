@@ -1,0 +1,6 @@
+1) GIT FORK VS GIT CLONE
+
+GIT FORK: private or separate copy of remote repository 
+GIT CLONE : local copy of repository
+
+So write access is not enabled for a branch , then we used to fork then request for a pull request
