@@ -1,0 +1,94 @@
+worker_processes  auto;
+error_log         "/opt/bitnami/nginx/logs/error.log";
+pid               "/opt/bitnami/nginx/tmp/nginx.pid";
+
+events {
+    worker_connections  1024;
+}
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    log_format    main '$remote_addr - $remote_user [$time_local] '
+                       '"$request" $status  $body_bytes_sent "$http_referer" '
+                       '"$http_user_agent" "$http_x_forwarded_for"';
+    access_log    "/opt/bitnami/nginx/logs/access.log" main;
+    add_header    X-Frame-Options SAMEORIGIN;
+
+    client_body_temp_path  "/opt/bitnami/nginx/tmp/client_body" 1 2;
+    proxy_temp_path        "/opt/bitnami/nginx/tmp/proxy" 1 2;
+    fastcgi_temp_path      "/opt/bitnami/nginx/tmp/fastcgi" 1 2;
+    scgi_temp_path         "/opt/bitnami/nginx/tmp/scgi" 1 2;
+    uwsgi_temp_path        "/opt/bitnami/nginx/tmp/uwsgi" 1 2;
+
+    sendfile           on;
+    tcp_nopush         on;
+    tcp_nodelay        off;
+    gzip               on;
+    gzip_http_version  1.0;
+    gzip_comp_level    2;
+    gzip_proxied       any;
+    gzip_types         text/plain text/css application/javascript text/xml application/xml+rss;
+    keepalive_timeout  65;
+    ssl_protocols      TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+    ssl_ciphers        HIGH:!aNULL:!MD5;
+    client_max_body_size 80M;
+    server_tokens off;
+
+    absolute_redirect  off;
+    port_in_redirect   off;
+
+    include  "/opt/bitnami/nginx/conf/server_blocks/*.conf";
+
+    # HTTP Server
+    server {
+        # Port to listen on, can also be set in IP:PORT format
+        listen  8080;
+
+        #server_name 192.168.10.53;
+
+
+        root  /var/www/html/unifyapp;
+        index index.html index.htm;
+
+        include  "/opt/bitnami/nginx/conf/bitnami/*.conf";
+
+        error_page 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 418 421 422 423 424 425 426 428 429 431 /customize_error_page.html;
+
+        location = /customize_error_page.html {
+            root /var/www/html/unifyapp/error_pages;
+            internal;
+        }
+
+        location /status {
+            stub_status on;
+            access_log   off;
+            allow 127.0.0.1;
+            deny all;
+        }
+
+        location /unifyapp/static {
+            alias /var/www/html/unifyapp/static;
+        }
+
+        location /unifyapp/login {
+            alias /var/www/html/unifyapp;
+        }
+        location /unifyapp/RedirectPage {
+            alias /var/www/html/unifyapp;
+        }
+        location /aeps/ {
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_pass http://aeps-engine-service:8080/aeps-engine/aeps/;
+        }
+
+            location ~ /(.*)SBBDFST6040(.*)$ {
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_pass http://internal-npci-service:8084;
+        }
+    }
+}
