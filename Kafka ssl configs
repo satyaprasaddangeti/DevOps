@@ -1,0 +1,177 @@
+Perfect 👍 — below I’ll give you complete working examples of both Kafka broker (server) and Spring Boot client configurations for SASL_SSL using the SCRAM-SHA-512 mechanism.
+
+This setup ensures encryption (SSL) and authentication (SASL) between your Kafka broker and Spring Boot app.
+
+
+---
+
+🧱 1️⃣ Kafka Broker Configuration
+
+📄 /opt/kafka/config/server.properties
+
+############################
+# Broker Basics
+############################
+broker.id=1
+listeners=SASL_SSL://0.0.0.0:9093
+advertised.listeners=SASL_SSL://<BROKER_IP_OR_HOSTNAME>:9093
+num.network.threads=3
+num.io.threads=8
+socket.send.buffer.bytes=102400
+socket.receive.buffer.bytes=102400
+socket.request.max.bytes=104857600
+log.dirs=/var/lib/kafka/data
+zookeeper.connect=<ZK_HOST>:2181
+offsets.topic.replication.factor=1
+
+############################
+# SSL Configuration
+############################
+ssl.keystore.location=/opt/kafka/config/server.keystore.jks
+ssl.keystore.password=<keystore_password>
+ssl.key.password=<key_password>
+ssl.truststore.location=/opt/kafka/config/server.truststore.jks
+ssl.truststore.password=<truststore_password>
+ssl.client.auth=none   # use "required" if clients must present keystore (mutual auth)
+
+############################
+# SASL Configuration
+############################
+security.inter.broker.protocol=SASL_SSL
+sasl.mechanism.inter.broker.protocol=SCRAM-SHA-512
+sasl.enabled.mechanisms=SCRAM-SHA-512
+
+############################
+# Logging
+############################
+log.retention.hours=168
+log.segment.bytes=1073741824
+log.retention.check.interval.ms=300000
+
+
+---
+
+📄 /opt/kafka/config/kafka_server_jaas.conf
+
+KafkaServer {
+    org.apache.kafka.common.security.scram.ScramLoginModule required
+    username="admin"
+    password="admin-secret";
+};
+
+Then start Kafka with this JAAS file:
+
+export KAFKA_OPTS="-Djava.security.auth.login.config=/opt/kafka/config/kafka_server_jaas.conf"
+bin/kafka-server-start.sh config/server.properties
+
+
+---
+
+🧩 Add user in Kafka (SCRAM credentials)
+
+Before starting, create the admin user in ZooKeeper (or in the cluster if using KRaft):
+
+kafka-configs.sh --zookeeper <zk_host>:2181 \
+  --alter --add-config 'SCRAM-SHA-512=[iterations=4096,password=admin-secret]' \
+  --entity-type users --entity-name admin
+
+
+---
+
+🌐 2️⃣ Spring Boot Kafka Client Configuration
+
+📄 application.properties
+
+############################
+# Kafka Bootstrap
+############################
+spring.kafka.bootstrap-servers=<BROKER_IP>:9093
+
+############################
+# Security Protocols
+############################
+spring.kafka.properties.security.protocol=SASL_SSL
+spring.kafka.properties.sasl.mechanism=SCRAM-SHA-512
+
+############################
+# SASL JAAS Config
+############################
+spring.kafka.properties.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \
+    username="admin" \
+    password="admin-secret";
+
+############################
+# SSL Configuration
+############################
+spring.kafka.properties.ssl.truststore.location=/app/config/client.truststore.jks
+spring.kafka.properties.ssl.truststore.password=<truststore_password>
+
+# Optional: if mutual auth (client keystore)
+# spring.kafka.properties.ssl.keystore.location=/app/config/client.keystore.jks
+# spring.kafka.properties.ssl.keystore.password=<keystore_password>
+# spring.kafka.properties.ssl.key.password=<key_password>
+
+############################
+# Consumer Config
+############################
+spring.kafka.consumer.group-id=my-group
+spring.kafka.consumer.auto-offset-reset=earliest
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.value-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+
+############################
+# Producer Config
+############################
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer=org.apache.kafka.common.serialization.StringSerializer
+
+
+---
+
+🧠 3️⃣ Quick Validation Steps
+
+✅ Check SSL
+
+openssl s_client -connect <BROKER_IP>:9093 -showcerts
+
+You should see certificate details (if not, fix truststore/ports).
+
+
+---
+
+✅ Check SASL Connection
+
+Use Kafka’s built-in CLI to test authentication:
+
+kafka-console-producer.sh \
+  --broker-list <BROKER_IP>:9093 \
+  --topic test-topic \
+  --producer.config client-ssl-sasl.properties
+
+📄 client-ssl-sasl.properties
+
+security.protocol=SASL_SSL
+sasl.mechanism=SCRAM-SHA-512
+sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="admin" password="admin-secret";
+ssl.truststore.location=/opt/kafka/config/client.truststore.jks
+ssl.truststore.password=<truststore_password>
+
+
+---
+
+⚠️ 4️⃣ Common Gotchas
+
+Problem	Root Cause	Fix
+
+Failed authentication with /<client_ip>	Wrong username/password	Recreate SCRAM user or fix JAAS credentials
+Invalid keystore format	Bad file or wrong type	Recreate .jks via keytool
+SSLHandshakeException: No name matching found	CN mismatch	Use ssl.endpoint.identification.algorithm= (empty) in client
+Cancelled inflight API version request	Wrong SSL/SASL combo	Double-check that both broker and client use SASL_SSL
+Unrecognized SASL mechanism	Missing SCRAM config	Add sasl.enabled.mechanisms=SCRAM-SHA-512 in server
+
+
+
+---
+
+Would you like me to include the commands to generate the keystore and truststore (self-signed certificates) too? That’s often the next required step for this setup.
+
