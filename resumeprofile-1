@@ -1,0 +1,71 @@
+P ROFILE 828
+ Summary — DevOpsEngineer with 3+ years of experience in CI/CD automation, containerization (Docker), and cloud
+ infrastructure (Azure, AWS, OpenStack). Proficient in Jenkins, GitLab, Ansible, ELK, Grafana, Keycloak, and scripting. Focused
+ on deployment speed, system reliability, and cloud-native scalability.
+ Skills
+ Operating System:
+ Linux
+ Configuration Management: Ansible, Terraform,
+ Cloud/Infrastructure:
+ IAM:
+ CI/CD Tools:
+ Version Control Systems:
+ Experience
+ AWS, Azure
+ Keycloak
+ Jenkins, Azure DevOps
+ Git, GitLab
+ Web/Proxy Servers:
+ Testing/Automation:
+ Messaging/Streaming:
+ Nginx
+ Selenium
+ Kafka, Zookeeper, Nifi
+ Containers/Orchestration: Docker, Kubernetes
+ Artifact:
+ Jfrog Artifactory
+ June 2022– Present
+ DevOps Engineer
+ • Built and optimized CI/CD pipelines using Git, Jenkins, Ansible, and Artifactory; reduced deployment time by 30%.
+ • Automated infrastructure provisioning and application deployment with Ansible, improving delivery speed by 25%.
+ • Managed Docker image lifecycle and private registries, improving deployment consistency by 40%.
+ • Configured monitoring tools (Grafana, Prometheus, ELK, PMM) to improve system visibility and reduce incident
+ resolution time by 20%.
+ • Designed scalable infrastructure on Azure using VMs, Load Balancers, Blob Storage, NSG, VNet, DNS, and IAM; ensured
+ 99.99% uptime.
+ • Deployed Apache NiFi clusters and added Selenium login tests into Jenkins pipelines, increasing test reliability by 30%.
+ • Created and maintained technical documentation, reducing onboarding and issue resolution time by 50%.
+ • Improved Jenkins pipelines for CI/CD, reducing build time by 35%.
+ • Migrated legacy systems to Azure, cutting infrastructure costs by 20% and improving scalability.
+ • Wrote automation scripts to streamline DevOps tasks, saving over 8 hours per week.
+ • Managed containerized environments in development and production, reducing configuration drift by 70%.
+ • Resolved critical incidents and implemented root cause fixes, reducing issue recurrence by 50%.
+ • Provided 24/7 support coverage to maintain SLA compliance and fast incident resolution.
+ Education
+ National Institute of Technology, Patna
+ B.Tech. in Computer Science and Engineering
+ Projects
+ July 2018– May 2022
+ Cuculus-Smartmeter
+ June 2022– Present
+ • Automated monitoring and reporting of electricity usage through digital technology, enabling real-time energy
+ monitoring, improving accuracy, and supporting dynamic pricing. Integrated Kafka and Zookeeper for data streaming,
+ Oracle Database for storage, and Keycloak for secure identity and access management.
+ Call Alerting
+ F
+ e
+ b
+ 2024– Present
+ • Developed a Kubernetes monitoring application that triggers real-time alerts via Telegram bots and email during service
+ downtimes, enabling quick issue resolution.
+ Cloud-Native Voting App on EKS
+ March 2025– April 2025
+ • Developed a voting application on Amazon EKS, incorporating a containerized React frontend, a Golang API, and
+ MongoDB with a replica set for fault tolerance and scalability. Leveraged Kubernetes for orchestration, ensuring efficient
+ autoscaling, load balancing, and streamlined management of microservices in a cloud-native environment.
+ Personality
+ • Experienced in automation, continuous integration, and promoting a DevOps culture within cross-functional teams to
+ enhance software delivery and operational efficiency.
+ • Proven ability to thrive in collaborative, fast-paced environments, delivering scalable and maintainable solutions aligned
+ with business goals.
+ • Strong advocate for reducing manual processes by building robust scripts, tools, and automated workflows
