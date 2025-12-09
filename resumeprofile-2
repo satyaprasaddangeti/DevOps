@@ -1,0 +1,46 @@
+PROFILE 223 
+PROFESSIONAL SUMMARY: 
+Kubernetes Administrator with 3.7 years of experience in managing containerized workloads and clusters  
+on Azure Kubernetes Service (AKS) and Rancher. Skilled in cluster setup, node pool management, 
+deployments, ingress, scaling, monitoring, and troubleshooting critical production issues. Strong 
+expertise in handling persistent volumes, networking, security policies, and CI/CD integration. 
+Proven ability to maintain uptime and ensure reliability in distributed systems. 
+CORE SKILLS:  
+• Kubernetes Administration: Cluster setup & upgrades, Node Pools, Namespaces, Deployments, 
+Services, Ingress, ConfigMaps, Secrets, RBAC, Network Policies, Helm, Troubleshooting 
+pods/PVC/disk space. 
+• Containerization & Orchestration: Kubernetes (AKS, Rancher), Docker. 
+• Infrastructure Automation: Terraform, Ansible, ARM Templates, Bicep. 
+• Monitoring & Logging: Prometheus, Grafana, Loki, Azure Monitor. 
+• Cloud Platforms: Microsoft Azure (AKS, App Services, Function Apps, Key Vault, ASR, ADF). 
+• Other Tools: Git, RabbitMQ, CouchDB, Keycloak, Linux, YAML, Bash, PowerShell, Python. 
+PROFESSIONAL EXPERIENCE: 
+| DevOps Engineer (Kubernetes Administrator Role) 
+Navi Mumbai | Dec 2021 – Present 
+• Built & managed Kubernetes clusters (AKS & Rancher) supporting microservices workloads for 
+enterprise applications. 
+• Configured and maintained node pools, ingress controllers, services, and namespaces ensuring isolation 
+and reliability. 
+• Troubleshot pod failures, PVC attachment issues, disk space alerts, and networking problems ensuring 
+smooth operations with minimal downtime. 
+• Implemented monitoring and alerting using Prometheus, Grafana, and Azure Monitor for proactive 
+incident response. 
+• Automated deployments and scaling with Helm charts, ConfigMaps, and Secrets for secure, repeatable 
+releases. 
+• Optimized resource utilization by tuning requests/limits, HPA (Horizontal Pod Autoscaler), and cluster 
+autoscaler. 
+• Integrated Kubernetes with Azure services (Key Vault, ADF, App Services) for end-to-end automation. 
+• Conducted RCAs & handled incident management improving reliability and reducing recurrence of 
+production issues. 
+EDUCATION: 
+Bachelor of Engineering (Electronics & Telecommunication) 
+MGM’s College of Engineering & Technology, Navi Mumbai | 2017 – 2021 
+CERTIFICATIONS:  
+• Microsoft Certified: Azure Administrator Associate (AZ-104) 
+• Microsoft Certified: Azure Fundamentals (AZ-900) 
+• Microsoft Certification in Python Programming 
+• GitHub Foundations 
+ACHIEVEMENTS & STRENGTHS: 
+• Recognized for best performance in Wipro team. 
+• Strong problem-solving and troubleshooting skills in distributed Kubernetes systems. 
+• Effective communicator & collaborator in agile cross-functional teams.
