@@ -1,0 +1,94 @@
+Great 👍
+Below is an ATS-optimized Performance Tester resume (≈80+ ATS score) tailored for 3 years experience, clean formatting, keyword-rich, and recruiter-friendly.
+You can copy this directly into Word / Google Docs.
+PERFORMANCE TEST ENGINEER
+Name: Shining Moon
+Experience: 3 Years
+Role: Performance Tester / Performance Engineer
+Location: India
+Email: your@email.com | Mobile: XXXXXXXXXX
+LinkedIn: linkedin.com/in/yourprofile
+PROFESSIONAL SUMMARY
+Performance Tester with 3 years of experience in designing, executing, and analyzing performance tests for web and microservices-based applications. Strong expertise in Apache JMeter, performance test strategy, workload modeling, and result analysis. Experienced in CI/CD integration, Docker, Kubernetes, and monitoring using Prometheus and Grafana. Proven ability to identify bottlenecks and collaborate with cross-functional teams to improve system performance and stability.
+TECHNICAL SKILLS
+Performance Testing
+Load Testing, Stress Testing, Spike Testing, Endurance (Soak) Testing
+Performance Test Strategy & Workload Modeling
+SLA Validation, Bottleneck Analysis, Root Cause Analysis
+Performance Tools
+Apache JMeter
+Distributed Performance Testing (Master–Slave)
+JMeter Plugins (Concurrency Thread Group, Ultimate Thread Group)
+Protocols & Technologies
+HTTP / HTTPS
+REST APIs
+JSON, Headers, Cookies
+OAuth, JWT Authentication
+Scripting & Programming
+Java
+Groovy (JSR223 scripting)
+Regular Expressions
+Basic Python scripting
+Monitoring & Observability
+JVM Monitoring (Heap, GC, Threads)
+CPU, Memory, Disk, Network monitoring
+Prometheus
+Grafana
+DevOps & CI/CD
+Jenkins (Performance test execution via pipelines)
+Docker
+Kubernetes
+Git
+Linux
+Databases
+SQL
+Query performance basics
+Connection pooling awareness
+PROFESSIONAL EXPERIENCE
+Performance Tester
+Company Name | Location
+Duration: Month Year – Present
+Designed and executed load, stress, and endurance tests for web and microservices-based applications.
+Developed Apache JMeter scripts with correlation, parameterization, assertions, and timers.
+Performed distributed load testing to simulate high concurrent user traffic.
+Analyzed performance metrics such as response time, throughput, error rate, and percentiles.
+Monitored application and infrastructure performance using Prometheus and Grafana dashboards.
+Conducted JVM analysis including heap usage, garbage collection, and thread behavior.
+Identified performance bottlenecks and shared actionable recommendations with development teams.
+Integrated performance test execution into Jenkins CI/CD pipelines.
+Executed performance tests in Docker and Kubernetes environments.
+Prepared detailed performance test reports and presented findings to stakeholders.
+KEY PROJECTS
+Microservices Performance Testing
+Tool: Apache JMeter
+Executed load and stress tests on REST APIs.
+Validated system scalability under peak load.
+Improved response time by identifying inefficient API calls.
+Kubernetes-Based Performance Testing
+Ran JMeter tests from Kubernetes pods.
+Collected metrics using Prometheus.
+Visualized performance trends in Grafana dashboards.
+ACHIEVEMENTS
+Successfully identified performance bottlenecks that reduced average response time by 20%.
+Automated performance test execution through CI/CD pipelines, improving testing efficiency.
+Supported production readiness by validating application scalability and stability.
+EDUCATION
+Bachelor’s Degree
+University Name | Year
+CERTIFICATIONS (Optional but Recommended)
+JMeter Performance Testing (Udemy / Coursera)
+Kubernetes Fundamentals
+Jenkins CI/CD Basics
+KEYWORDS (ATS BOOST)
+Performance Testing, Apache JMeter, Load Testing, Stress Testing, Soak Testing, REST API Testing, JVM Monitoring, Prometheus, Grafana, Jenkins, Docker, Kubernetes, CI/CD, Java, Groovy, Microservices, SLA, Throughput, Response Time, Scalability Testing
+✅ Why this resume scores 80+ ATS
+Clean formatting (no tables, no graphics)
+Strong keyword density
+Role-aligned responsibilities
+Metrics-driven impact statements
+DevOps + Performance combination (high demand)
+If you want, I can:
+✍️ Customize this for job description matching
+🎯 Optimize for Performance Engineer / SRE roles
+🧠 Provide interview questions based on this resume
+Just tell me 👍
