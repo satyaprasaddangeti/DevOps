@@ -1,0 +1,65 @@
+import subprocess
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Namespace to monitor
+NAMESPACE = "default"
+
+# Run kubectl command
+cmd = ["kubectl", "top", "pods", "-n", NAMESPACE]
+output = subprocess.check_output(cmd).decode("utf-8")
+
+lines = output.strip().split("\n")[1:]
+
+data = []
+
+for line in lines:
+    pod, cpu, memory = line.split()
+    
+    # Convert CPU to millicores
+    cpu_m = int(cpu.replace("m", ""))
+    
+    # Convert memory to MiB
+    if memory.endswith("Mi"):
+        mem_mi = int(memory.replace("Mi", ""))
+    elif memory.endswith("Gi"):
+        mem_mi = int(float(memory.replace("Gi", "")) * 1024)
+    else:
+        mem_mi = 0
+
+    data.append({
+        "Pod": pod,
+        "CPU (m)": cpu_m,
+        "Memory (Mi)": mem_mi
+    })
+
+df = pd.DataFrame(data)
+
+# Create Excel writer
+excel_file = "pod_utilization.xlsx"
+writer = pd.ExcelWriter(excel_file, engine="openpyxl")
+
+# Generate separate sheet & graph per pod
+for pod in df["Pod"].unique():
+    pod_df = df[df["Pod"] == pod]
+    pod_df.to_excel(writer, sheet_name=pod, index=False)
+
+    # CPU graph
+    plt.figure()
+    plt.bar(pod_df["Pod"], pod_df["CPU (m)"])
+    plt.title(f"CPU Usage - {pod}")
+    plt.ylabel("Millicores")
+    plt.savefig(f"{pod}_cpu.png")
+    plt.close()
+
+    # Memory graph
+    plt.figure()
+    plt.bar(pod_df["Pod"], pod_df["Memory (Mi)"])
+    plt.title(f"Memory Usage - {pod}")
+    plt.ylabel("MiB")
+    plt.savefig(f"{pod}_memory.png")
+    plt.close()
+
+writer.close()
+
+print("✅ Pod utilization collected and Excel file created:", excel_file)
