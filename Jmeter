@@ -1,0 +1,60 @@
+JMeter as a Kubernetes Pod
+
+Dockerfile
+
+Step 1: Version 1 – Downloading JMeter dependencies from the internet
+
+FROM eclipse-temurin:11-jre-jammy
+
+ENV JMETER_VERSION=5.6.3
+ENV JMETER_HOME=/opt/jmeter
+ENV PATH=$JMETER_HOME/bin:$PATH
+
+RUN apt-get update &&     apt-get install -y wget unzip curl &&     wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz &&     tar -xzf apache-jmeter-${JMETER_VERSION}.tgz &&     mv apache-jmeter-${JMETER_VERSION} ${JMETER_HOME} &&     rm apache-jmeter-${JMETER_VERSION}.tgz &&     apt-get clean
+
+WORKDIR ${JMETER_HOME}
+CMD ["sleep", "infinity"]
+
+
+Step 2: Version 2 – Alternative Dockerfile when JMeter zip is available locally
+
+FROM eclipse-temurin:11-jre-jammy
+
+ENV JMETER_VERSION=5.6.3
+ENV JMETER_HOME=/opt/jmeter
+ENV PATH="${JMETER_HOME}/bin:${PATH}"
+
+RUN apt-get update &&     apt-get install -y unzip &&     rm -rf /var/lib/apt/lists/*
+
+COPY apache-jmeter-${JMETER_VERSION}.zip /tmp/
+
+RUN unzip /tmp/apache-jmeter-${JMETER_VERSION}.zip -d /opt &&     mv /opt/apache-jmeter-${JMETER_VERSION} ${JMETER_HOME} &&     rm /tmp/apache-jmeter-${JMETER_VERSION}.zip &&     apt-get purge -y unzip &&     apt-get autoremove -y
+
+WORKDIR ${JMETER_HOME}
+CMD ["sleep", "infinity"]
+
+
+Step 3: JMeter Deployment YAML
+
+(Deployment YAML content)
+
+
+Step 4: Copy JMX file and access the pod
+
+kubectl cp file.jmx <pod-name>:/tests/file.jmx
+kubectl exec -it <pod-name> -- bash
+
+
+Step 5: ConfigMap for JMeter test plan
+
+(ConfigMap YAML content)
+
+
+Step 6: JMeter Job YAML
+
+(Job YAML content)
+
+
+Step 7: Master–Slave JMeter setup using ConfigMaps
+
+
