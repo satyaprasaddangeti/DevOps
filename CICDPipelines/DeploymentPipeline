@@ -1,0 +1,212 @@
+pipeline {
+    agent any
+    environment {
+        docker_build_path = "/weblogic/ri_kiosk_uat/tanzu/UAT_GIT_IMAGE_BUILDNG/UPP/current_baseline"
+        REPORTFILE="trivyreport_UppDeploymentUatJob_BuildID-${env.BUILD_ID}.txt"
+		REPORTMOVE="/weblogic/jenkins/new/trivyreports/"
+    }
+    parameters {
+        string(name: 'TRIGGER_COMMIT_MSG', defaultValue: '', description: 'Original commit Message')
+    }
+    stages {
+        stage('Setting Deployment'){
+            steps{
+                script {
+                    if (Deployment_Name == "upp-auth" ) {
+                        env.deploymentpath='upp-auth'
+                        env.imagename='tkgsharedharbor.corp.ad.sbi/reimagination/upp-auth'
+						env.imagenamevks='h06vksharbor.corp.ad.sbi/reimagination/upp-auth'
+                        env.dockerfile='Dockerfile_auth'
+                        env.deployment='upp-authservice'
+                        env.deploymentyaml='upp_auth_dep.yml'
+                        
+                    } else if (Deployment_Name == "upp-edge" ) {
+                        env.deploymentpath='upp-edge'
+                        env.imagename='tkgsharedharbor.corp.ad.sbi/reimagination/upp-edge'
+						env.imagenamevks='h06vksharbor.corp.ad.sbi/reimagination/upp-edge'
+                        env.dockerfile='Dockerfile_edge'
+                        env.deployment='upp-edgeservice'
+                        env.deploymentyaml='upp_edge_dep.yml'
+                    }
+                    else if (Deployment_Name == "upp-cbs" ) {
+                        env.deploymentpath='upp-cbs'
+                        env.imagename='tkgsharedharbor.corp.ad.sbi/reimagination/upp-cbs'
+						env.imagenamevks='h06vksharbor.corp.ad.sbi/reimagination/upp-cbs'
+                        env.dockerfile='Dockerfile_cbs'
+                        env.deployment='upp-lmgservices-cbs'
+                        env.deploymentyaml='upp_cbs_dep.yml'
+                    }
+                    else if (Deployment_Name == "upp-efrm" ) {
+                        env.deploymentpath='upp-efrm'
+                        env.imagename='tkgsharedharbor.corp.ad.sbi/reimagination/upp-efrm'
+						env.imagenamevks='h06vksharbor.corp.ad.sbi/reimagination/upp-efrm'
+                        env.dockerfile='Dockerfile_efrm'
+                        env.deployment='upp-lmgservices-efrm'
+                        env.deploymentyaml='upp_efrm_dep.yml'
+                    }
+                    else if (Deployment_Name == "upp-eis" ) {
+                        env.deploymentpath='upp-eis'
+                        env.imagename='tkgsharedharbor.corp.ad.sbi/reimagination/upp-eis'
+						env.imagenamevks='h06vksharbor.corp.ad.sbi/reimagination/upp-eis'
+                        env.dockerfile='Dockerfile_eis'
+                        env.deployment='upp-lmgservices-eis'
+                        env.deploymentyaml='upp_eis_dep.yml'
+                    }
+                    else if (Deployment_Name == "upp-epg" ) {
+                        env.deploymentpath='upp-epg'
+                        env.imagename='tkgsharedharbor.corp.ad.sbi/reimagination/upp-epg'
+						env.imagenamevks='h06vksharbor.corp.ad.sbi/reimagination/upp-epg'
+                        env.dockerfile='Dockerfile_epg'
+                        env.deployment='upp-lmgservices-epg'
+                        env.deploymentyaml='upp_epg_dep.yml'
+                    }
+                    else if (Deployment_Name == "upp-innovatrix" ) {
+                        env.deploymentpath='upp-innovatrix'
+                        env.imagename='tkgsharedharbor.corp.ad.sbi/reimagination/upp-innovatrix'
+						env.imagenamevks='h06vksharbor.corp.ad.sbi/reimagination/upp-innovatrix'
+                        env.dockerfile='Dockerfile_inno'
+                        env.deployment='upp-lmgservices-innovatrix'
+                        env.deploymentyaml='upp_innovatrix_dep.yml'
+                    }
+                    else if (Deployment_Name == "upp-limits" ) {
+                        env.deploymentpath='upp-limits'
+                        env.imagename='tkgsharedharbor.corp.ad.sbi/reimagination/upp-limits'
+						env.imagenamevks='h06vksharbor.corp.ad.sbi/reimagination/upp-limits'
+                        env.dockerfile='Dockerfile_limits'
+                        env.deployment='upp-lmgservices-limits'
+                        env.deploymentyaml='upp_limits_dep.yml'
+                    }
+                    else if (Deployment_Name == "upp-notification" ) {
+                        env.deploymentpath='upp-notification'
+                        env.imagename='tkgsharedharbor.corp.ad.sbi/reimagination/upp-notification'
+						env.imagenamevks='h06vksharbor.corp.ad.sbi/reimagination/upp-notification'
+                        env.dockerfile='Dockerfile_noti'
+                        env.deployment='upp-lmgservices-notification'
+                        env.deploymentyaml='upp_notification_dep.yml'
+                    }
+                    else if (Deployment_Name == "upp-npci" ) {
+                        env.deploymentpath='upp-npci'
+                        env.imagename='tkgsharedharbor.corp.ad.sbi/reimagination/upp-npci'
+						env.imagenamevks='h06vksharbor.corp.ad.sbi/reimagination/upp-npci'
+                        env.dockerfile='Dockerfile_npci'
+                        env.deployment='upp-lmgservices-npci'
+                        env.deploymentyaml='upp_npci_dep.yml'
+                    }
+                    else if (Deployment_Name == "upp-orch" ) {
+                        env.deploymentpath='upp-orch'
+                        env.imagename='tkgsharedharbor.corp.ad.sbi/reimagination/upp-orch'
+						env.imagenamevks='h06vksharbor.corp.ad.sbi/reimagination/upp-orch'
+                        env.dockerfile='Dockerfile_orch'
+                        env.deployment='upp-orchestrationservices-consumers'
+                        env.deploymentyaml='upp_orch_dep.yml'
+                    }
+                    else if (Deployment_Name == "upp-schedular" ) {
+                        env.deploymentpath='upp-schedular'
+                        env.imagename='tkgsharedharbor.corp.ad.sbi/reimagination/upp-schedular'
+						env.imagenamevks='h06vksharbor.corp.ad.sbi/reimagination/upp-schedular'
+                        env.dockerfile='Dockerfile_schedular'
+                        env.deployment='upp-schedular'
+                        env.deploymentyaml='upp_schedular_dep.yml'
+                    }
+                    else if (Deployment_Name == "upp-vmn" ) {
+                        env.deploymentpath='upp-vmn'
+                        env.imagename='tkgsharedharbor.corp.ad.sbi/reimagination/upp-vmn'
+						env.imagenamevks='h06vksharbor.corp.ad.sbi/reimagination/upp-vmn'
+                        env.dockerfile='Dockerfile_vmn'
+                        env.deployment='upp-vmnservices'
+                        env.deploymentyaml='upp_vmn_dep.yml'
+                    }
+                    else if (Deployment_Name == "upp-lams" ) {
+                        env.deploymentpath='upp-lams'
+                        env.imagename='tkgsharedharbor.corp.ad.sbi/reimagination/upp-lams'
+						env.imagenamevks='h06vksharbor.corp.ad.sbi/reimagination/upp-lams'
+                        env.dockerfile='Dockerfile_lams'
+                        env.deployment='upp-lamsservices'
+                        env.deploymentyaml='upp_lams_dep.yml'
+                    }
+                }
+            }
+        }
+        stage('Image Building'){
+            steps{
+                script {
+					def current_tag=sh(
+                    script: "docker images | grep ${env.imagename} | awk 'NR == 1 {print \$2}'",
+	                returnStdout: true
+                    ).trim()
+                    def a=current_tag.split('\\.')[0]
+                    def b=current_tag.split('\\.')[1]
+                    def incrementno=String.format('%02d',b.toInteger()+1)
+                    def nexttag="${a}.${incrementno}"
+                    env.NEXT_TAG=nexttag
+                    echo "Current Tag:${current_tag}"
+                    echo "Next Tag:${env.NEXT_TAG}"
+                    echo "Image Name:${env.imagename}"
+                    echo "Dockerfile:${env.dockerfile}"
+					
+                    sh """ cd ${DOCKER_BUILD_PATH}
+                    echo "vaibhavumale123" | sudo -S chown -R vaibhavumale:vaibhavumale *
+                    echo "vaibhavumale123" | sudo -S chmod 775 -R *
+                    docker build -t ${env.imagename}:${env.NEXT_TAG} -f ${env.dockerfile} --no-cache .
+                 #   export TRIVY_OFFLINE_SCAN=true
+                 #   trivy image --skip-db-update --cache-dir ~/.cache/trivy/ --severity CRITICAL,HIGH --format table --output ${env.REPORTFILE} ${env.imagename}:${env.NEXT_TAG}
+				 #   ls -lh ${env.REPORTFILE} || echo "Report Not Found!!!"
+				#	mv ${env.REPORTFILE} ${env.REPORTMOVE}
+				
+				#	echo "Trivy Scan Report saved to : ${env.REPORTMOVE}/${env.REPORTFILE}"
+					"""
+
+                    sh """docker push  ${env.imagename}:${env.NEXT_TAG} """
+                
+                    def oldVersionNo = String.format('%02d',b.toInteger()-2)
+					def oldTag="${a}.${oldVersionNo}"
+					echo "Removing old Image: ${env.imagename}:${oldTag}"
+					sh """ docker rmi ${env.imagename}:${oldTag} || echo "Old Image not found, skipping removal." """
+					
+                    sh """ 
+                      docker tag ${env.imagename}:${env.NEXT_TAG}  ${env.imagenamevks}:${env.NEXT_TAG}
+                      docker login -u v1014039 -p Rolex@222 h06vksharbor.corp.ad.sbi
+                      docker push ${env.imagenamevks}:${env.NEXT_TAG}
+                      docker rmi ${env.imagenamevks}:${oldTag} || echo "Old Image not found, skipping removal." 
+                      
+                      docker rmi ${env.imagenamevks}:${NEXT_TAG} || echo "New Image not found, skipping removal."
+                     """
+                }
+            }
+        }
+
+
+
+            stage('TANZU YAML IMAGE VERSION CHANGE'){
+            steps{
+                script {
+                    dir('/weblogic/ri_kiosk_uat/tanzu/env_as_configmap/private_registry'){
+				  def a  = readYaml file: "${env.deploymentyaml}"
+                  echo a.spec.template.spec.containers.image.toString()
+				      a.spec.template.spec.containers[0].image="${env.imagename}:${env.NEXT_TAG}"
+				  echo a.spec.template.spec.containers.image.toString()
+				  writeYaml file: "${env.deploymentyaml}", data: a , overwrite: true
+                  echo 'yaml image version is changed'
+                  echo "Trigger Message: ${params.TRIGGER_COMMIT_MSG}"
+				  }
+                }
+            }
+        }
+            stage('VKS YAML IMAGE VERSION CHANGE & Applying'){
+            steps{
+                script {
+                    dir('/weblogic/ri_kiosk_uat/vks/deployment-files/vks-private'){
+                  sh """ sed -i 's#image: ${env.imagenamevks}:.*#image: ${env.imagenamevks}:${env.NEXT_TAG}#' "${env.deploymentyaml}"
+                          alias vksuat="export KUBECONFIG=/weblogic/ri_kiosk_uat/tanzu/h06vksuatfigskbpcls-cred.txt"
+                          vksuat 
+                          kubectl apply -f "${env.deploymentyaml}"
+                          kubectl get po  """                          
+                  echo 'VKS yaml image version is changed'
+                  echo "Trigger Message: ${params.TRIGGER_COMMIT_MSG}"
+				  }
+                }
+            }
+        }
+
+    }
+}
