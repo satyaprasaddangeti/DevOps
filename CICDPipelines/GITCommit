@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+    environment {
+        GIT_PATH = "/weblogic/ri_kiosk_uat/tanzu/GIT_COMMIT/fi_reimagination"
+    }
+    stages {
+        stage('Validating Parameters'){
+            steps{
+                script {
+                   if (!params.GIT_COMMIT_MESSAGE?.trim()) {
+				       error "GIT_MESSAGE cannot be null or empty!"
+					}
+				   if (!params.Developer_Name?.trim()) {
+				       error "Developer_Name cannot be null or empty!"
+					}
+				   if (!params.Deployer_Name?.trim()) {
+				       error "Deployer_Name cannot be null or empty!"
+					}
+				   if (!params.Release_Notes_Version?.trim()) {
+				       error "Release_Notes_Version cannot be null or empty!"
+					}
+					
+                }
+            }
+        }
+		stage('Commiting Into GIT'){
+		    steps{
+			      dir("${GIT_PATH}"){
+				  sh """
+				  	  echo "vaibhavumale123" | sudo -S chown vaibhavumale:vaibhavumale -R *
+				      echo "vaibhavumale123" | sudo -S sudo chmod 775 -R *
+				      git status
+                      git add .
+                      git commit -m " Deployer_Name:${Deployer_Name} - Developer_Name:${Developer_Name} - GIT_COMMIT_MESSAGE:${GIT_COMMIT_MESSAGE}---V${Release_Notes_Version}"
+                      git push origin FIUAT
+                    """
+				    }
+				}
+		}
+    }
+}
