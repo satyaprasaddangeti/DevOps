@@ -1,0 +1,168 @@
+// Mapping of microservices to config paths
+def microservicePaths = [
+    
+// UPP services
+"upp-cbs"          : ["rails/common/lmgservices", "lmg/mwconfig/cbs/", "lmg/AEPS/CBS/"],
+"upp-eis"          : ["rails/common/lmgservices", "lmg/mwconfig/eis/", "lmg/AEPS/EIS/", "lmg/PAYMENTS/EIS/"],
+"upp-efrm"         : ["rails/common/lmgservices", "lmg/mwconfig/efrm/", "lmg/AEPS/EFRM/"],
+"upp-epg"          : ["rails/common/lmgservices", "lmg/mwconfig/epg/", "lmg/AEPS/EPG/"],
+"upp-innovatrix"   : ["rails/common/lmgservices", "lmg/mwconfig/innovatrix/", "lmg/AEPS/INNOVATRIX/"],
+"upp-limits"       : ["rails/common/lmgservices", "lmg/mwconfig/limits/", "lmg/AEPS/LIMITS/"],
+"upp-notification" : ["rails/common/lmgservices", "lmg/mwconfig/notification/", "lmg/AEPS/NOTIFICATION/"],
+"upp-npci"         : ["rails/common/lmgservices", "lmg/mwconfig/npci/", "lmg/AEPS/NPCI/"],
+"upp-impsnpci"     : ["rails/common/lmgservices", "lmg/mwconfig/impsnpci/", "lmg/IMPS/NPCI/"],
+"upp-lmg-audit"    : ["rails/common/lmgservices/uppengine/auditignitconfig/", "lmg/mwconfig/uppaudit/"],
+"upp-lmg-inb"      : ["rails/common/lmgservices", "lmg/mwconfig/inb/", "lmg/AEPS/INB/"],		
+"upp-auth"         : ["rails/common/authservices"],
+"upp-edge"         : ["rails/common/edgeservices", "rails/aeps/edgeservices"],
+"upp-orch"         : ["rails/common/orchestrationservices/", "rails/aeps/orchestrationservices", "rails/imps/orchestrationservices", "rails/neft/orchestrationservices/", "rails/card/orchestrationservices", "rails/shg/orchestrationservices/"],
+"upp-schedular"    : ["rails/common/orchestrationservices/", "rails/aeps/orchestrationservices", "rails/card/orchestrationservices", "rails/scheduler/"],
+"upp-vmn"          : ["rails/common/vmnservices/"],
+"upp-lams"         : ["rails/common/lamsservices/"],
+"upp-aeps-engine"  : ["AppData/aeps"],	
+
+// TMF services
+"dfi-auth"                    : ["AppConfig/auth_config/", "AppConfig/audit_config", "AppConfig/filter_config/", "AppConfig/core_config/", "AppConfig/logger_config/"],
+"dfi-customermanagement"      : ["AppConfig/customermanagement_config/", "AppConfig/audit_config", "AppConfig/filter_config/", "AppConfig/core_config/", "AppConfig/logger_config/", "AppConfig/uiutility_config/"],
+"dfi-explayer"                : ["AppConfig/explayer_config/", "AppConfig/audit_config", "AppConfig/filter_config/", "AppConfig/core_config/", "AppConfig/logger_config/", "AppConfig/uiutility_config/"],
+"dfi-masterdata"              : ["AppConfig/masterdata_config/", "AppConfig/filter_config/", "AppConfig/logger_config/"],
+"dfi-security-exchange"       : ["AppConfig/security_config_exchange/"],
+"dfi-security-login"          : ["AppConfig/security_config_login/"],
+"dfi-uiutility"               : ["AppConfig/uiutility_config/", "AppConfig/audit_config", "AppConfig/filter_config/", "AppConfig/core_config/", "AppConfig/logger_config/"],
+"dfi-usermanagement"          : ["AppConfig/usermanagement_config/", "AppConfig/audit_config", "AppConfig/filter_config/", "AppConfig/core_config/", "AppConfig/logger_config/"],
+"dfi-sss"                     : ["AppConfig/sss_config/", "AppConfig/audit_config", "AppConfig/filter_config/", "AppConfig/core_config/", "AppConfig/logger_config/"],
+"dfi-springcloudconfigserver" : ["AppConfig/cloud_config_server_config/"],
+"dfi-rekyc-prodregrekyc"      : ["AppConfig/rekyc_prodregrekyc/"],
+"dfi-rekyc-svccust"           : ["AppConfig/rekyc_svccust"],
+"dfi-prodregrdfd"             : ["AppConfig/acct_prodregrdfd/"],
+"dfi-retrycomponent"          : ["AppConfig/retry_component_config/"],
+"dfi-acct-prodregkyc"         : ["AppConfig/acct_prodregkyc_config/"],
+"dfi-account-opening"         : ["AppConfig/AccountOpening_config"],
+"dfi-customerlimits"          : ["AppConfig/customerlimits_config/", "AppConfig/logger_config/"],
+"dfi-messagingrouter"         : ["AppConfig/messagingrouter_config/", "AppConfig/logger_config/"],
+"dfi-userlimits"              : ["AppConfig/userlimits_config/", "AppConfig/filter_config/", "AppConfig/logger_config/"],
+"dfi-svccust"                 : ["AppConfig/svccust_config/"],
+"dfi-svcnotification"         : ["AppConfig/svcnotification-config/"],
+"dfi-bbps-prodreg"            : ["AppConfig/prodregbbps_config/"]
+
+]
+
+def pipelineMap = [
+	"UPP_DEPLOYMENT_UAT": ["upp-cbs", "upp-eis", "upp-efrm", "upp-epg", "upp-innovatrix", "upp-limits", "upp-notification", "upp-npci", "upp-impsnpci", "upp-lmg-audit", "upp-lmg-inb", "upp-auth", "upp-edge", "upp-orch", "upp-schedular", "upp-vmn", "upp-lams", "upp-aeps-engine"],
+
+	"TMF_DEPLOYMENT_UAT": ["dfi-auth", "dfi-customermanagement", "dfi-explayer", "dfi-masterdata", "dfi-security-exchange", "dfi-security-login", "dfi-uiutility", "dfi-usermanagement", "dfi-sss", "dfi-springcloudconfigserver", "dfi-rekyc-prodregrekyc", "dfi-rekyc-svccust", "dfi-prodregrdfd", "dfi-retrycomponent", "dfi-acct-svccust", "dfi-acct-svcnotification", "dfi-acct-prodregkyc", "dfi-account-opening", "dfi-bbps-progreg", "dfi-customerlimits", "dfi-messagingrouter", "dfi-userlimits", "dfi-svccust", "dfi-svcnotification", "dfi-bbps-prodreg"]
+]
+
+def commitInfo = ""
+
+
+pipeline {
+    agent any
+
+    environment {
+        BRANCH = "${env.GIT_BRANCH ?: 'FIUAT'}"
+        git_path = "/weblogic/ri_kiosk_uat/tanzu/GIT_COMMIT/fi_reimagination"
+    }
+
+    stages {
+        stage('Detect Changes') {
+            steps {
+                script {
+                    dir(env.git_path) {
+                        commitInfo = sh(script: "git log -1 --pretty=format:'%h - %s (%an)'", returnStdout: true).trim()
+                        def changedFiles = sh(script: "git diff --name-only HEAD~ HEAD", returnStdout: true).trim().split('\n').findAll { it?.trim() }
+
+                        echo "?? Last Commit: ${commitInfo}"
+                        echo "?? Changed Files:\n${changedFiles.join('\n')}"
+
+                        def serviceChangeMap = [:].withDefault { [] }
+                        def affectedServices = [] as Set
+
+                        microservicePaths.each { svc, paths ->
+                            changedFiles.each { file ->
+                                if (paths.any { path -> file.startsWith(path) }) {
+                                    affectedServices << svc
+                                    serviceChangeMap[svc] << file
+                                }
+                            }
+                        }
+
+                        if (affectedServices.isEmpty()) {
+                            echo "? No relevant microservices affected."
+                            currentBuild.description = "No changes"
+                            return
+                        }
+
+                        env.COMMIT_INFO = commitInfo
+                        env.AFFECTED_SERVICES = affectedServices.join(',')
+
+                        echo "?? Impact Summary:"
+                        affectedServices.each { svc ->
+                            echo "• ${svc} affected by:"
+                            serviceChangeMap[svc].each { f -> echo "  - ${f}" }
+                        }
+
+                        // Save services list to env vars for parallel stage
+                        def uppSvcs = affectedServices.findAll { pipelineMap["UPP_DEPLOYMENT_UAT"].contains(it) }
+                        def tmfSvcs   = affectedServices.findAll { pipelineMap["TMF_DEPLOYMENT_UAT"].contains(it) }
+
+                        env.UPP_SERVICES = uppSvcs.join(',')
+                        env.TMF_SERVICES = tmfSvcs.join(',')
+                    }
+                }
+            }
+        }
+
+        stage('Trigger Child Pipelines') {
+            steps {
+                script {
+                    def triggerJobs = [:]
+
+                    env.UPP_SERVICES?.split(',')?.each { svc ->
+                        if (svc?.trim()) {
+                            triggerJobs["Upp: ${svc}"] = {
+                                build job: 'UPP_DEPLOYMENT_UAT',
+                                    parameters: [
+                                        string(name: 'Deployment_Name', value: svc),
+                                        string(name: 'TRIGGER_COMMIT_MSG', value: commitInfo)
+                                        ],
+                                    wait: true
+                                echo "? UPP service '${svc}' build triggered."
+                            }
+                        }
+                    }
+
+                    env.TMF_SERVICES?.split(',')?.each { svc ->
+                        if (svc?.trim()) {
+                            triggerJobs["Tmf: ${svc}"] = {
+                                build job: 'TMF_DEPLOYMENT_UAT',
+                                    parameters: [
+                                        string(name: 'Deployment_Name', value: svc),
+                                        string(name: 'TRIGGER_COMMIT_MSG', value: commitInfo)
+                                        ],
+                                    wait: true
+                                echo "? TMF service '${svc}' build triggered."
+                            }
+                        }
+                    }
+
+                    if (!triggerJobs.isEmpty()) {
+                        parallel triggerJobs
+                    } else {
+                        echo "?? No pipeline trigger jobs configured!"
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "? Build success: ${env.COMMIT_INFO}"
+            echo "? Services triggered: ${env.AFFECTED_SERVICES}"
+        }
+        failure {
+            echo "? Build failed: ${env.COMMIT_INFO}"
+        }
+    }
+}
