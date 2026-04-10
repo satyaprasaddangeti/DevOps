@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    stages {
+         stage('Restarting UPP'){
+            steps{
+                script {
+                    echo 'restarting orchestration '
+                    sh """ 
+                          alias tanzuuat="export KUBECONFIG=/weblogic/ri_kiosk_uat/tanzu/h06tkguatfigskbp-cred-2.1.1"
+                          tanzuuat
+                          kubectl get po
+                          kubectl rollout restart deployment/upp-orchestrationservices-consumers 
+                          kubectl get po
+
+                          """
+                    echo 'Waiting 24 seconds to restart LMG'
+                    sleep(time: 30,unit: "SECONDS")
+                    echo 'restarting LMG '
+                    sh """ 
+                          alias tanzuuat="export KUBECONFIG=/weblogic/ri_kiosk_uat/tanzu/h06tkguatfigskbp-cred-2.1.1"
+                          tanzuuat
+                          kubectl get po
+                          kubectl rollout restart deployment/upp-authservice                 
+                          kubectl rollout restart deployment/upp-edgeservice               
+                          kubectl rollout restart deployment/upp-lmgservices-cbs              
+                          kubectl rollout restart deployment/upp-lmgservices-efrm            
+                          kubectl rollout restart deployment/upp-lmgservices-eis               
+                          kubectl rollout restart deployment/upp-lmgservices-epg             
+                          kubectl rollout restart deployment/upp-lmgservices-innovatrix        
+                          kubectl rollout restart deployment/upp-lmgservices-limits             
+                          kubectl rollout restart deployment/upp-lmgservices-notification       
+                          kubectl rollout restart deployment/upp-lmgservices-npci 
+		                  kubectl rollout restart deployment/upp-schedular 
+		                  kubectl rollout restart deploy/upp-lamsservices
+		                  kubectl rollout restart deploy/upp-vmnservices
+                          kubectl get po
+
+                       """
+                    echo 'Application is Restarted '
+            }
+        }
+    }
+    
+}
+}
