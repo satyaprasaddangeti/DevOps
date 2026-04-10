@@ -1,0 +1,201 @@
+#This code is Deveopled by Lalith charan
+
+from datetime import datetime
+import sys
+import statistics
+import csv
+import os
+
+
+
+
+#Request_keyword = ["SRVC=[AEPS_OFFUS_ISS_WDL] MSG_FROM_NPCI" , "SRVC=[AEPS_OFFUS_ISS_PUR] MSG_FROM_NPCI" , "SRVC=[AEPS_OFFUS_ISS_MINISTMT] MSG_FROM_NPCI" ,"SRVC=[AEPS_OFFUS_ISS_FT] MSG_FROM_NPCI" , "SRVC=[AEPS_OFFUS_ISS_BAL] MSG_FROM_NPCI"]
+Request_keyword =  "SRVC :: AEPS_OFFUS_ISS_WDL  , SRVC :: AEPS_OFFUS_ISS_FT ,SRVC :: AEPS_OFFUS_ISS_MINISTMT ,SRVC :: AEPS_OFFUS_ISS_PUR ,SRVC :: AEPS_OFFUS_ISS_BAL"
+Request_keyword_list = [k.strip() for k in Request_keyword.split(",")]
+#Request_keyword = [SRVC :: AEPS_OFFUS_ISS_WDL , "SRVC :: AEPS_OFFUS_ISS_FT" , "SRVC :: AEPS_OFFUS_ISS_MINISTMT" , "SRVC :: AEPS_OFFUS_ISS_PUR" , "SRVC :: AEPS_OFFUS_ISS_BAL" ]
+Response_keyword = ["SRVC=[AEPS_OFFUS_ISS_WDL] MSG_TO_NPC"  , "SRVC=[AEPS_OFFUS_ISS_PUR] MSG_TO_NPCI" , "SRVC=[AEPS_OFFUS_ISS_MINISTMT] MSG_TO_NPCI" , "SRVC=[AEPS_OFFUS_ISS_FT] MSG_TO_NPCI" , "SRVC=[AEPS_OFFUS_ISS_BAL] MSG_TO_NPCI" ]
+success_keyword = 'result="SUCCESS"'
+
+txn_id_request = 0
+
+Request_txn_time_array = {}
+Response_txn_time_array = {}
+avg=[]
+if len(sys.argv) < 1:
+    print("Usage: python3 script.py <logfile>")
+    sys.exit(1)
+count=0
+timestamp=0
+second=0
+time_only_request=0
+log_file = sys.argv[1]
+log_dir = os.path.dirname(os.path.abspath(log_file))
+output_path = os.path.join(log_dir,'msgid.txt')
+mis=0
+#Request TXN ID and Timestamp code start here
+with open(log_file, 'r') as file:
+    for line in file:
+        #print(Request_keyword)
+        if any(Request_keyword in line for Request_keyword in Request_keyword_list):
+            parts = line.split()
+            #print(Request_keyword)
+            if len(parts) >= 2:
+                timestamp = parts[0].strip()
+                second = parts[0] + " " + parts[1]
+                time_only_request = parts[1].strip(",|INFO|")
+            part = line.strip().split("|")
+            if len(part) >= 5:
+                msgid = part[4].strip()
+                if "MsgId" in msgid:
+                    txn_id_request = msgid.split("::")[1].strip()
+                    #print(txn_id_request)
+                    Request_txn_time_array[txn_id_request]=time_only_request
+
+
+
+
+
+success_msgids = []
+failure_msgids = []
+
+## Response Keyword Separation code
+
+with open(log_file, 'r') as file:
+    for line in file:
+        if any(keyword in line for keyword in Response_keyword):
+            if success_keyword in line:
+                line_parts = line.strip().split(" ", 1)
+                if len(line_parts) > 2:
+                    continue
+                time_only_response = line_parts[1].split('|')[0].strip()
+                pipe_parts = line.strip().split('|')
+                if len(pipe_parts) >= 6:
+                    txn_id_response = pipe_parts[5].strip()
+                Response_txn_time_array[txn_id_response]=time_only_response
+                success_msgids.append(txn_id_response)
+            else: ##Failure Transactions Code
+                line_parts = line.strip().split(" ", 1)
+                if len(line_parts) > 2:
+                    continue
+                time_only_response = line_parts[1].split('|')[0].strip()
+                pipe_parts = line.strip().split('|')
+                if len(pipe_parts) >= 6:
+                    txn_id_response = pipe_parts[5].strip()
+                failure_msgids.append(txn_id_response)
+
+
+time_format = "%H:%M:%S.%f"
+#diff_ms=0
+result = []
+MSGID = []
+
+for key,value in Request_txn_time_array.items():
+    if key in Response_txn_time_array:
+        time_1=datetime.strptime(Request_txn_time_array[key],time_format)
+        time_2=datetime.strptime(Response_txn_time_array[key],time_format)
+        #print(time_1)
+        #print(f"\nfirstreq: {time_1} sec ")
+        #print(time_2)
+        #print(f"\nresponse: {time_2} sec ")
+        diff_ms = int((time_2 - time_1).total_seconds() )
+        avg.append(diff_ms)
+        MSGID.append(key)
+        #TPS Code First Request Response and also Last Response
+        first_request_ts = list(Request_txn_time_array.values ())[0]
+        last_request_ts = list(Request_txn_time_array.values ())[-1]
+        last_response_ts = list(Response_txn_time_array.values ())[-1]
+
+
+
+with open(output_path, 'w') as f:
+    for a, b in zip(MSGID,avg):
+        print(a, b, sep=', ',file=f)
+
+#for a,b in zip(MSGID,avg):
+    #print(a,b, sep=', ')
+
+if avg:
+    avgresponse=statistics.mean(avg)
+    get_percentile=0
+    avg.sort()
+    def percentile(avg, percent):
+        k = (len(avg) - 1)* percent
+        f = int(k)
+        c = f + 1
+        if c >= len(avg):
+            return avg[-1]
+        return avg[f] + (avg[c] - avg[f]) * (k - f)
+else:
+    print("No data Aviaable")
+
+
+
+#for a,b in zip(MSGID,avg):
+    #print(a,b, sep=', ')
+
+#with open(log_file, "w") as f:
+   #for a,b in zip(MSGID,avg):
+    #print(a,b, sep=', ')
+    #f.write(a,b, sep=', ' + "\n")
+
+
+
+
+
+pt90 = percentile(avg, 0.90)
+pt95 = percentile(avg, 0.95)
+successcount =0
+failurecount = 0
+TotalTxnCount = 0
+
+print("\n Success Transactions TXNID: ")  ##Listing Success Transcation IDs
+for l in success_msgids:
+    successcount += 1
+    print(l)
+print("\n Failure Transactions TXNID: ")  ##Listing Failure Transcation IDs
+for l in failure_msgids:
+    print(l)
+    failurecount += 1
+
+TotalTxnCount=failurecount+successcount
+print("Total No of Transcations : ")
+print(TotalTxnCount)
+
+print("Successfull Transcations Count:")
+print(successcount)
+print("Failure  Transcations Count:")
+print(failurecount)
+
+
+
+#Average printing code
+
+print(f"\nAverage of Successfull Transactions: {avgresponse} sec ")
+print("\t".expandtabs(2))
+print(f"\n90th Percentile of Successfull Transactions: {pt90:.2f} sec")
+print(f"95th Percentile of Successfull Transactions: {pt95:.2f} sec")
+
+print("\t".expandtabs(2))
+
+#parse string timestamps to datetime objects
+first_request_ts_dt = datetime.strptime(first_request_ts,time_format)
+last_request_ts_dt = datetime.strptime(last_request_ts,time_format)
+last_response_ts_dt = datetime.strptime(last_response_ts,time_format)
+print (first_request_ts_dt)
+print (last_request_ts_dt)
+print (last_response_ts_dt)
+#Calculate durations in seconds
+Injection_TPS_sec = (last_request_ts_dt-first_request_ts_dt).total_seconds()
+Response_TPS_sec = (last_response_ts_dt-first_request_ts_dt).total_seconds()
+
+
+Injection__TPS = TotalTxnCount/Injection_TPS_sec
+Response_TPS = TotalTxnCount/Response_TPS_sec
+
+print(f"Injection TPS : {Injection__TPS}")
+print(f"Response_TPS : {Response_TPS}")
+
+print("\t".expandtabs(2))
+
+
+
